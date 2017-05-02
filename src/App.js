@@ -1,18 +1,41 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
+import marked from 'marked';
+
+import InputArea from './components/input-area';
+
 
 class App extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      value: '',
+      markup: ''
+    }
+  }
+
+  markupText = (value) => {
+    this.setState({
+      value: value
+    });
+  };
+
+  createMarkup = () => {
+    return {__html: marked(this.state.value)};
+  };
+
   render() {
     return (
-      <div className="App">
-        <div className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h2>Welcome to React</h2>
-        </div>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
+      <div className="row">
+        <InputArea 
+          className="col-md-6"
+          value={this.state.value}
+          onTextChange={(value) => this.markupText(value)}
+        />
+        <div 
+          className="col-md-6"
+          dangerouslySetInnerHTML={this.createMarkup()}/>
       </div>
     );
   }
